@@ -1,23 +1,17 @@
+use itertools::Itertools;
+
 advent_of_code::solution!(1);
 
 fn split_input(input: &str) -> (Vec<u64>, Vec<u64>) {
-    let lines = input.lines();
-    let count = lines.count();
     input
         .lines()
         .map(|l| {
             l.split_whitespace()
                 .map(|x| x.parse::<u64>().expect("Should parse"))
-                .collect::<Vec<u64>>()
+                .collect_tuple::<(u64, u64)>()
+                .expect("Should get two numbers")
         })
-        .fold(
-            (Vec::with_capacity(count), Vec::with_capacity(count)),
-            |(mut v1, mut v2), lv| {
-                v1.push(lv[0]);
-                v2.push(lv[1]);
-                (v1, v2)
-            },
-        )
+        .collect::<(Vec<u64>, Vec<u64>)>()
 }
 
 pub fn part_one(input: &str) -> Option<u64> {
@@ -39,11 +33,15 @@ pub fn part_two(input: &str) -> Option<u64> {
         .max()
         .copied()
         .expect("There should be a max number") as usize;
-    let counts = v2.into_iter().fold(vec![0; max + 1], |mut acc, x| {
-        acc[x as usize] += 1;
+    let counts = v2.into_iter().fold(vec![0_u8; max], |mut acc, x| {
+        acc[x as usize - 1] += 1;
         acc
     });
-    Some(v1.into_iter().map(|x| x * counts[x as usize]).sum::<u64>())
+    Some(
+        v1.into_iter()
+            .map(|x| x * counts[x as usize - 1] as u64)
+            .sum::<u64>(),
+    )
 }
 
 #[cfg(test)]

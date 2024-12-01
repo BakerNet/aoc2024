@@ -1,9 +1,9 @@
 advent_of_code::solution!(1);
 
-pub fn part_one(input: &str) -> Option<u64> {
+fn split_input(input: &str) -> (Vec<u64>, Vec<u64>) {
     let lines = input.lines();
     let count = lines.count();
-    let (mut v1, mut v2) = input
+    input
         .lines()
         .map(|l| {
             l.split_whitespace()
@@ -17,7 +17,11 @@ pub fn part_one(input: &str) -> Option<u64> {
                 v2.push(lv[1]);
                 (v1, v2)
             },
-        );
+        )
+}
+
+pub fn part_one(input: &str) -> Option<u64> {
+    let (mut v1, mut v2) = split_input(input);
     v1.sort();
     v2.sort();
     Some(
@@ -29,23 +33,7 @@ pub fn part_one(input: &str) -> Option<u64> {
 }
 
 pub fn part_two(input: &str) -> Option<u64> {
-    let lines = input.lines();
-    let count = lines.count();
-    let (v1, v2) = input
-        .lines()
-        .map(|l| {
-            l.split_whitespace()
-                .map(|x| x.parse::<u64>().expect("Should parse"))
-                .collect::<Vec<u64>>()
-        })
-        .fold(
-            (Vec::with_capacity(count), Vec::with_capacity(count)),
-            |(mut v1, mut v2), lv| {
-                v1.push(lv[0]);
-                v2.push(lv[1]);
-                (v1, v2)
-            },
-        );
+    let (v1, v2) = split_input(input);
     let max = v2
         .iter()
         .max()

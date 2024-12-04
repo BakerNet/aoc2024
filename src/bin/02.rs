@@ -13,16 +13,16 @@ fn process_input(input: &str) -> Vec<Vec<u64>> {
         .collect_vec()
 }
 
-fn is_increasing(v: &Vec<u64>) -> bool {
+fn is_increasing(v: &[u64]) -> bool {
     let one = v[0] < v[1];
     let two = v[1] < v[2];
     let three = v[2] < v[3];
-    one && two || two && three || one && three
+    one && two || (one || two) && three
 }
 
 fn is_bad(x: u64, y: u64, increasing: bool) -> bool {
     let (x, y) = if increasing { (x, y) } else { (y, x) };
-    x == y || x > y || y - x > 3
+    x >= y || y - x > 3
 }
 
 pub fn part_one(input: &str) -> Option<u64> {

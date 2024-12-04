@@ -20,7 +20,7 @@ pub fn part_one(input: &str) -> Option<u64> {
     v2.sort();
     Some(
         v1.into_iter()
-            .zip(v2.into_iter())
+            .zip(v2)
             .map(|(x, y)| if x > y { x - y } else { y - x })
             .sum::<u64>(),
     )

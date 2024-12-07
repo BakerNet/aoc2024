@@ -25,7 +25,7 @@ enum Op {
 }
 
 impl Op {
-    fn do_op(self, x: u64, y: u64) -> u64 {
+    fn do_op(&self, x: u64, y: u64) -> u64 {
         match self {
             Self::Add => x + y,
             Self::Mult => x * y,
@@ -36,7 +36,7 @@ impl Op {
     }
 }
 
-fn is_valid(target: u64, curr: u64, remaining: &[u64], part_2: bool) -> bool {
+fn is_valid(target: u64, curr: u64, remaining: &[u64], ops: &[Op]) -> bool {
     if curr > target {
         return false;
     }
@@ -46,26 +46,8 @@ fn is_valid(target: u64, curr: u64, remaining: &[u64], part_2: bool) -> bool {
         }
         return false;
     }
-    is_valid(
-        target,
-        Op::Add.do_op(curr, remaining[0]),
-        &remaining[1..],
-        part_2,
-    ) || is_valid(
-        target,
-        Op::Mult.do_op(curr, remaining[0]),
-        &remaining[1..],
-        part_2,
-    ) || if part_2 {
-        is_valid(
-            target,
-            Op::Conc.do_op(curr, remaining[0]),
-            &remaining[1..],
-            part_2,
-        )
-    } else {
-        false
-    }
+    ops.into_iter()
+        .any(|op| is_valid(target, op.do_op(curr, remaining[0]), &remaining[1..], ops))
 }
 
 pub fn part_one(input: &str) -> Option<u64> {
@@ -73,7 +55,7 @@ pub fn part_one(input: &str) -> Option<u64> {
     Some(
         lines
             .into_iter()
-            .filter(|(t, ns)| is_valid(*t, 0, ns, false))
+            .filter(|(t, ns)| is_valid(*t, 0, ns, &[Op::Add, Op::Mult]))
             .map(|(t, _)| t)
             .sum(),
     )
@@ -84,7 +66,7 @@ pub fn part_two(input: &str) -> Option<u64> {
     Some(
         lines
             .into_iter()
-            .filter(|(t, ns)| is_valid(*t, 0, ns, true))
+            .filter(|(t, ns)| is_valid(*t, 0, ns, &[Op::Add, Op::Mult, Op::Conc]))
             .map(|(t, _)| t)
             .sum(),
     )

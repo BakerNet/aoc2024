@@ -105,7 +105,7 @@ fn has_loop(map: &[Vec<char>], start: (usize, usize)) -> bool {
             if seen[r][c].contains(&dir) {
                 return true;
             }
-            seen[r][c].push(dir.clone());
+            seen[r][c].push(dir);
             pos = (r, c);
         }
     }

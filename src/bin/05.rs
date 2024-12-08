@@ -37,7 +37,7 @@ pub fn part_one(input: &str) -> Option<u64> {
     let res = updates
         .into_iter()
         .filter_map(|nums| {
-            let mut seen = vec![false; 100];
+            let mut seen = [false; 100];
             let bad = nums.iter().any(|x| {
                 seen[*x as usize] = true;
                 pre_rules[*x as usize].iter().any(|y| seen[*y as usize])
@@ -57,7 +57,7 @@ pub fn part_two(input: &str) -> Option<u64> {
     let mut bad = updates
         .into_iter()
         .filter(|nums| {
-            let mut seen = vec![false; 100];
+            let mut seen = [false; 100];
             nums.iter().any(|x| {
                 seen[*x as usize] = true;
                 pre_rules[*x as usize].iter().any(|y| seen[*y as usize])

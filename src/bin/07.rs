@@ -9,8 +9,7 @@ fn parse_input(input: &str) -> Vec<(u64, Vec<u64>)> {
             let s1 = l.split_once(":").expect("Should be able to split on :");
             let target = s1.0.parse::<u64>().expect("Should be number 1");
             let nums =
-                s1.1.trim()
-                    .split_whitespace()
+                s1.1.split_whitespace()
                     .map(|x| x.parse::<u64>().expect("Should be number 2"))
                     .collect_vec();
             (target, nums)
@@ -40,13 +39,13 @@ fn is_valid(target: u64, curr: u64, remaining: &[u64], ops: &[Op]) -> bool {
     if curr > target {
         return false;
     }
-    if remaining.len() == 0 {
+    if remaining.is_empty() {
         if curr == target {
             return true;
         }
         return false;
     }
-    ops.into_iter()
+    ops.iter()
         .any(|op| is_valid(target, op.do_op(curr, remaining[0]), &remaining[1..], ops))
 }
 

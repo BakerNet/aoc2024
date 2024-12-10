@@ -44,12 +44,9 @@ fn valid_trails(curr: Point, map: &[Vec<u32>], seen: &mut [Vec<bool>]) -> usize 
         return 1;
     }
     let ns = neighbors(curr, map.len() - 1, map[0].len() - 1);
-    fn is_seen(x: &Point, seen: &mut [Vec<bool>]) -> bool {
-        seen[x.0][x.1]
-    }
     ns.into_iter()
         .filter_map(|p| {
-            if !is_seen(&p, seen) && map[p.0][p.1] == curr_val + 1 {
+            if map[p.0][p.1] == curr_val + 1 && !seen[p.0][p.1] {
                 Some(valid_trails(p, map, seen))
             } else {
                 None
